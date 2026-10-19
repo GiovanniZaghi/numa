@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-magenta: #c71585;
+  --color-magenta-deep: #8e0d5e;
+  --color-magenta-ink: #4a0a33;
+  --color-blush: #fce4ec;
+  --color-petal: #f7c6dc;
+  --color-cream: #fff7f2;
+  --color-ink: #24111c;
+  --color-muted: #6d5664;
+
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  /* Destaques em script: Gistesy (quando o arquivo for adicionado) com Allura como substituta. */
+  --font-script: "Gistesy", var(--font-script-fallback), cursive;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(3deg); }
+  }
+}
+
+/* Uma animação por quantidade de fotos: cada foto fica visível por 1/N do ciclo. */
+@keyframes photo-backdrop-3 {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  33.3% { opacity: 1; }
+  39.3% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes photo-backdrop-4 {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  25% { opacity: 1; }
+  31% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-cream font-sans text-ink antialiased;
+  }
+  /* Palavras em destaque nos títulos usam a fonte script. */
+  em {
+    @apply font-script font-normal not-italic;
+    font-size: 1.3em;
+    line-height: 0.8;
+  }
+  ::selection {
+    @apply bg-magenta text-white;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-magenta;
+  }
+}
+
+@layer utilities {
+  .bg-dots {
+    background-image: radial-gradient(rgb(255 255 255 / 0.18) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  /* Carrossel de fundo: crossfade entre as fotos (ver keyframes photo-backdrop-N). */
+  .photo-backdrop-slide {
+    opacity: 0;
+    animation: var(--slide-animation) var(--slide-cycle) linear infinite both;
+    animation-delay: var(--slide-delay);
+  }
+  /* Visível por padrão; só fica escondido quando o JS marca data-visible="false". */
+  .reveal {
+    transition:
+      opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal[data-visible="false"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal, .reveal[data-visible="false"] { opacity: 1; transform: none; }
+  /* Sem animação: mostra só a primeira foto, parada. */
+  .photo-backdrop-slide { animation: none; }
+  .photo-backdrop-slide:first-child { opacity: 1; }
+}

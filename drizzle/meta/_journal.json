@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792372623887,
+      "tag": "0000_create_registrations",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792419126401,
+      "tag": "0001_add_waitlist",
+      "breakpoints": true
+    }
+  ]
+}
