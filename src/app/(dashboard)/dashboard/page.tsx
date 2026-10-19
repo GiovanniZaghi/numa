@@ -36,8 +36,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-red-800">
         <h1 className="text-lg font-bold">Não foi possível carregar as inscrições</h1>
         <p className="mt-2 text-sm">
-          Verifique se o PostgreSQL está rodando, se a <code>DATABASE_URL</code> do <code>.env.local</code> está correta e se
-          a migration foi aplicada (<code>npm run db:migrate</code>).
+          Verifique se o banco está acessível, se a variável <code>DATABASE_URL</code> está correta e se as tabelas foram
+          criadas (<code>npm run db:migrate</code>).
         </p>
       </div>
     );

@@ -7,5 +7,6 @@ export default defineConfig({
   dialect: "postgresql",
   schema: "./src/core/infrastructure/database/schema.ts",
   out: "./drizzle",
-  dbCredentials: { url: process.env.DATABASE_URL! },
+  // Migrations usam conexão direta (sem pooler) quando disponível — ex.: Neon na Vercel.
+  dbCredentials: { url: (process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL)! },
 });
