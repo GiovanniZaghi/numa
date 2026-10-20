@@ -19,7 +19,7 @@ export const numaExperiencia: Omit<Event, "payment" | "contact"> = {
     postalCode: "08696-470",
     region: "Alto Tietê",
   },
-  price: money(4999),
+  price: money(5999),
   capacity: 25,
   cancellationWindowHours: 48,
   manifesto:

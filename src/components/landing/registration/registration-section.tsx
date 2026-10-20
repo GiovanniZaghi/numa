@@ -41,7 +41,7 @@ export function RegistrationSection({ event, isFull = false }: { event: Event; i
                 <ClockIcon className="size-6" />
               </span>
               <div>
-                <p className="font-semibold">As {event.capacity} vagas foram preenchidas 💗</p>
+                <p className="font-semibold">As vagas foram preenchidas 💗</p>
                 <p className="mt-1 text-sm leading-relaxed text-white/75">
                   Mas ainda dá para participar: entre na fila de espera. Se alguma vaga abrir, chamamos pelo WhatsApp,
                   por ordem de inscrição. Não é preciso pagar nada agora.
