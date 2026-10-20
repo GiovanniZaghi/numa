@@ -78,6 +78,7 @@ export const numaExperiencia: Omit<Event, "payment" | "contact"> = {
     { name: "Padaria Dona Augusta", category: "Padaria", instagram: "padariadonaaugusta", logoUrl: "/partners/padariadonaaugusta.jpg" },
     { name: "Voratti Arquitetura", category: "Arquitetura e interiores", instagram: "voratti.arq", logoUrl: "/partners/voratti.arq.jpg" },
     { name: "Matriz IT", category: "Tecnologia", instagram: "matrizit", logoUrl: "/partners/matrizit.jpg" },
+    { name: "E.V.A & Cia", category: "Tapetes", instagram: "evaeciaoficial", logoUrl: "/partners/evaeciaoficial.jpg" },
   ],
   dressCode: [
     {
