@@ -33,6 +33,7 @@ export interface RegistrationRepository {
    */
   saveWithinCapacity(registration: Registration, capacity: number): Promise<CapacityReservation>;
   update(registration: Registration): Promise<void>;
+  delete(id: string): Promise<void>;
   findById(id: string): Promise<Registration | null>;
   /** Ordenado da mais recente para a mais antiga. */
   list(query: RegistrationQuery): Promise<Registration[]>;

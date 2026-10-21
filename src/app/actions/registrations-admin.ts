@@ -26,3 +26,23 @@ export async function setRegistrationPaidAction(registrationId: string, paid: bo
     return { ok: false, error: "Não foi possível salvar. Tente novamente." };
   }
 }
+
+export type DeleteResult = { ok: true } | { ok: false; error: string };
+
+export async function deleteRegistrationAction(registrationId: string): Promise<DeleteResult> {
+  await requireAdmin();
+
+  if (!z.uuid().safeParse(registrationId).success) return { ok: false, error: "Dados inválidos." };
+
+  try {
+    await container.deleteRegistration.execute(registrationId);
+    revalidatePath("/dashboard");
+    // A vaga liberada muda a landing (pode sair do modo fila de espera).
+    revalidatePath("/");
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof DomainError) return { ok: false, error: error.message };
+    console.error("[deleteRegistrationAction]", error);
+    return { ok: false, error: "Não foi possível excluir. Tente novamente." };
+  }
+}

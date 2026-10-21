@@ -75,6 +75,10 @@ export class PostgresRegistrationRepository implements RegistrationRepository {
       .where(eq(registrations.id, registration.id));
   }
 
+  async delete(id: string): Promise<void> {
+    await this.db().delete(registrations).where(eq(registrations.id, id));
+  }
+
   async findById(id: string): Promise<Registration | null> {
     if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
     const [row] = await this.db().select().from(registrations).where(eq(registrations.id, id)).limit(1);

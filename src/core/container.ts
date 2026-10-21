@@ -1,4 +1,5 @@
 import "server-only";
+import { DeleteRegistrationUseCase } from "./application/use-cases/delete-registration";
 import { ExportPaidRegistrationsUseCase } from "./application/use-cases/export-paid-registrations";
 import { GetEventUseCase } from "./application/use-cases/get-event";
 import { GetEventAvailabilityUseCase } from "./application/use-cases/get-event-availability";
@@ -35,6 +36,7 @@ export const container = {
   getEventAvailability: new GetEventAvailabilityUseCase(eventRepository, registrationRepository),
   listRegistrations: new ListRegistrationsUseCase(eventRepository, registrationRepository),
   setRegistrationPaid: new SetRegistrationPaidUseCase(registrationRepository, clock),
+  deleteRegistration: new DeleteRegistrationUseCase(registrationRepository),
   exportPaidRegistrations: new ExportPaidRegistrationsUseCase(
     eventRepository,
     registrationRepository,
