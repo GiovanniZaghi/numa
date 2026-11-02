@@ -5,8 +5,8 @@ import turmaCorreria from "@/assets/photos/hero-turma-correria.jpg";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, CalendarIcon, ClockIcon, PinIcon, SparkleIcon } from "@/components/ui/icons";
-import type { Event } from "@/core/domain/entities/event";
-import { formatDayMonth, formatHour, formatMoney, formatShortDate, formatWeekday } from "@/lib/format";
+import { shortLocation, type Event } from "@/core/domain/entities/event";
+import { formatDayMonth, formatMoney, formatShortDate, formatTimeRange, formatWeekday } from "@/lib/format";
 import Image from "next/image";
 import { Countdown } from "./countdown";
 import { registrationAnchor } from "./navigation";
@@ -15,7 +15,13 @@ import { PhotoBackdrop } from "./photo-backdrop";
 const photos = [turmaCorreria, pilatesParque, grupoBandeira];
 
 export function HeroSection({ event, isFull = false }: { event: Event; isFull?: boolean }) {
-  const hours = `${formatHour(event.startsAt)} — ${formatHour(event.endsAt)}`;
+  const hours = formatTimeRange(event.startsAt, event.endsAt);
+  // Link secundário aponta para o que esta edição tiver: programação ou destaques.
+  const secondary = event.schedule.length
+    ? { href: "#cronograma", label: "Ver a programação" }
+    : event.highlights.length
+      ? { href: "#detalhes", label: "Ver o que vai rolar" }
+      : null;
 
   return (
     <section id="topo" className="relative isolate overflow-hidden bg-magenta pt-32 pb-36 text-white md:pt-40 md:pb-44">
@@ -41,6 +47,9 @@ export function HeroSection({ event, isFull = false }: { event: Event; isFull?: 
               className="h-auto w-full max-w-[560px]"
             />
           </h1>
+          {event.edition && (
+            <p className="mt-5 text-2xl font-semibold tracking-tight text-white md:text-3xl">{event.edition}</p>
+          )}
 
           <p className="mt-8 max-w-lg text-lg leading-relaxed font-light text-white/85 md:text-xl">
             {event.tagline}
@@ -48,12 +57,14 @@ export function HeroSection({ event, isFull = false }: { event: Event; isFull?: 
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
             <a href={registrationAnchor} className={buttonVariants({ variant: "light", size: "lg", className: "group" })}>
-              {isFull ? "Entrar na fila de espera" : "Garantir minha vaga"}
-              <ArrowRightIcon className="size-5 transition group-hover:translate-x-1" />
+              {isFull ? "Entrar na fila de espera" : (event.ctaLabel ?? "Garantir minha vaga")}
+              {(isFull || !event.ctaLabel) && <ArrowRightIcon className="size-5 transition group-hover:translate-x-1" />}
             </a>
-            <a href="#cronograma" className="px-2 text-sm font-semibold tracking-wide text-white/85 underline-offset-8 hover:text-white hover:underline">
-              Ver a programação
-            </a>
+            {secondary && (
+              <a href={secondary.href} className="px-2 text-sm font-semibold tracking-wide text-white/85 underline-offset-8 hover:text-white hover:underline">
+                {secondary.label}
+              </a>
+            )}
           </div>
 
           <div className="mt-12">
@@ -64,7 +75,7 @@ export function HeroSection({ event, isFull = false }: { event: Event; isFull?: 
 
         <div className="relative mx-auto w-full max-w-sm lg:mr-0">
           <RotatingBadge
-            text={isFull ? "Vagas esgotadas • Fila de espera aberta •" : "Vagas limitadas • Inscrições abertas •"}
+            text={isFull ? "Vagas esgotadas • Fila de espera aberta •" : `Apenas ${event.capacity} vagas • Inscrições abertas •`}
             className="absolute -top-14 -right-6 z-10 size-32 md:-right-12 md:size-36"
           />
 
@@ -88,7 +99,7 @@ export function HeroSection({ event, isFull = false }: { event: Event; isFull?: 
                 </li>
                 <li className="flex items-center gap-3">
                   <PinIcon className="size-5 text-magenta" />
-                  {event.location.venueName} · {event.location.city}
+                  {shortLocation(event.location)}
                 </li>
               </ul>
             </div>

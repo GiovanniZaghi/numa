@@ -31,6 +31,7 @@ export function RegistrationSection({ event, isFull = false }: { event: Event; i
                 {isFull ? "Entre na fila de espera da" : "Garanta sua vaga na"}
                 {/* Logo do evento no lugar do nome, para manter a tipografia da marca */}
                 <Image src={eventLogo} alt={event.name} sizes="320px" className="mt-4 block h-auto w-full max-w-[320px]" />
+                {event.edition && <span className="mt-3 block text-2xl md:text-3xl">{event.edition}</span>}
               </>
             }
           />

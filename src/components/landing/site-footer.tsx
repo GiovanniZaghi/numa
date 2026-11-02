@@ -2,9 +2,9 @@ import { Container } from "@/components/ui/container";
 import { InstagramIcon } from "@/components/ui/icons";
 import { Logo } from "./logo";
 import { InstagramLink } from "./instagram-link";
-import { instagram, navigation } from "./navigation";
+import { instagram, type NavItem } from "./navigation";
 
-export function SiteFooter() {
+export function SiteFooter({ navigation }: { navigation: readonly NavItem[] }) {
   return (
     <footer className="relative overflow-hidden bg-ink pt-20 pb-28 text-white md:pb-10">
       <Container>

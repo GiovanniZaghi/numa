@@ -5,9 +5,14 @@ import { CloseIcon, MenuIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Logo } from "./logo";
-import { navigation, registrationAnchor } from "./navigation";
+import { registrationAnchor, type NavItem } from "./navigation";
 
-export function SiteHeader({ isFull = false }: { isFull?: boolean }) {
+interface SiteHeaderProps {
+  navigation: readonly NavItem[];
+  isFull?: boolean;
+}
+
+export function SiteHeader({ navigation, isFull = false }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 

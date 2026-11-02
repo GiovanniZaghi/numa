@@ -7,7 +7,10 @@ import { Reveal } from "./reveal";
 
 export function LocationSection({ event }: { event: Event }) {
   const { location } = event;
-  const query = encodeURIComponent(fullAddress(location));
+  const address = fullAddress(location);
+  // Sem endereço completo não há mapa nem rotas para mostrar.
+  if (!address) return null;
+  const query = encodeURIComponent(address);
 
   return (
     <section id="local" className="bg-blush py-24 md:py-32">
@@ -60,7 +63,7 @@ export function LocationSection({ event }: { event: Event }) {
         <Reveal delay={120}>
           <div className="overflow-hidden rounded-[2rem] border border-ink/10 bg-white shadow-xl shadow-magenta/10">
             <iframe
-              title={`Mapa: ${fullAddress(location)}`}
+              title={`Mapa: ${address}`}
               src={`https://maps.google.com/maps?q=${query}&z=16&output=embed`}
               className="block aspect-[4/3] w-full md:aspect-[16/11]"
               loading="lazy"

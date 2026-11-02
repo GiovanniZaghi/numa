@@ -5,6 +5,8 @@ import { formatHour } from "@/lib/format";
 import { Reveal } from "./reveal";
 
 export function ScheduleSection({ event }: { event: Event }) {
+  if (event.schedule.length === 0) return null;
+
   return (
     <section id="cronograma" className="bg-blush py-24 md:py-32">
       <Container className="grid gap-14 lg:grid-cols-[1fr_1.5fr] lg:gap-20">
@@ -17,8 +19,12 @@ export function ScheduleSection({ event }: { event: Event }) {
             />
             <p className="mt-10 text-6xl font-semibold text-magenta md:text-7xl">
               {formatHour(event.startsAt)}
-              <span className="mx-3 font-light text-ink/25">→</span>
-              {formatHour(event.endsAt)}
+              {event.endsAt && (
+                <>
+                  <span className="mx-3 font-light text-ink/25">→</span>
+                  {formatHour(event.endsAt)}
+                </>
+              )}
             </p>
           </Reveal>
         </div>

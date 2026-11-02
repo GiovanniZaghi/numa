@@ -20,12 +20,21 @@ export function formatWeekday(date: Date): string {
   return new Intl.DateTimeFormat("pt-BR", { weekday: "long", timeZone: TIME_ZONE }).format(date);
 }
 
+/** "15h" ou "10h30". */
 export function formatHour(date: Date): string {
-  const hour = new Intl.DateTimeFormat("pt-BR", {
+  const parts = new Intl.DateTimeFormat("pt-BR", {
     hour: "numeric",
+    minute: "2-digit",
     timeZone: TIME_ZONE,
-  }).format(date);
-  return `${Number(hour)}h`;
+  }).formatToParts(date);
+  const hour = Number(parts.find((p) => p.type === "hour")?.value);
+  const minute = parts.find((p) => p.type === "minute")?.value ?? "00";
+  return minute === "00" ? `${hour}h` : `${hour}h${minute}`;
+}
+
+/** "10h30" ou "15h — 19h" quando há término. */
+export function formatTimeRange(startsAt: Date, endsAt: Date | null): string {
+  return endsAt ? `${formatHour(startsAt)} — ${formatHour(endsAt)}` : formatHour(startsAt);
 }
 
 /** "18/10/2026 22:05" */

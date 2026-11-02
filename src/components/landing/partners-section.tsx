@@ -16,6 +16,8 @@ import { Reveal } from "./reveal";
 const photos = [ecobagTag, bolsaNuma, tagDetalhe, ecobagGrama];
 
 export function PartnersSection({ event }: { event: Event }) {
+  if (event.partners.length === 0) return null;
+
   return (
     <section id="parceiros" className="relative isolate overflow-hidden bg-cream py-24 md:py-32">
       <PhotoBackdrop photos={photos} />

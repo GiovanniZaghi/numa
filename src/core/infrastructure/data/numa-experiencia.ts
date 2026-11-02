@@ -1,10 +1,14 @@
 import type { Event } from "@/core/domain/entities/event";
 import { money } from "@/core/domain/value-objects/money";
 
-/** Conteúdo estático do evento. Substituível por CMS/API trocando o repositório. */
+/**
+ * Edição Eco Bag (31/10). Todas as inscrições feitas antes do Hyrox pertencem a ela.
+ * O slug "numa-experiencia" é o que está gravado no banco: não alterar, ou elas se desvinculam.
+ */
 export const numaExperiencia: Omit<Event, "payment" | "contact"> = {
   slug: "numa-experiencia",
-  name: "Numa Experiência",
+  name: "Numa Experiência: Edição Eco Bag",
+  edition: "Edição Eco Bag",
   organizer: "Numa Club",
   tagline:
     "Um encontro de movimento, bem-estar e conexões reais para mulheres que inspiram.",
@@ -41,6 +45,7 @@ export const numaExperiencia: Omit<Event, "payment" | "contact"> = {
         "Oficina criativa, brunch artesanal e mimos exclusivos dos nossos parceiros.",
     },
   ],
+  highlights: [],
   schedule: [
     { time: "15:00", title: "Recepção" },
     { time: "15:30", title: "Momento conexão" },

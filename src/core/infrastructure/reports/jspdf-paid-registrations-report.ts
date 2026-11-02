@@ -38,7 +38,7 @@ export class JsPdfPaidRegistrationsReport implements PaidRegistrationsReportRend
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text(
-      `${longDate(event.startsAt)} · ${event.location.venueName}, ${event.location.city} - ${event.location.state}`,
+      [longDate(event.startsAt), [event.location.venueName, event.location.city].filter(Boolean).join(", ")].join(" · "),
       margin,
       20,
     );

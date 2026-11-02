@@ -6,6 +6,8 @@ import { LookPolaroids } from "./look-polaroids";
 import { Reveal } from "./reveal";
 
 export function DressCodeSection({ event }: { event: Event }) {
+  if (event.dressCode.length === 0) return null;
+
   return (
     <section id="dresscode" className="overflow-hidden bg-blush py-24 md:py-32">
       <Container className="grid items-center gap-16 lg:grid-cols-2 lg:gap-12">

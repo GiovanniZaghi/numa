@@ -3,7 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import type { PaymentStatusFilter } from "@/core/application/ports/registration-repository";
 import type { ListRegistrationsOutput } from "@/core/application/use-cases/list-registrations";
 import { container, CURRENT_EVENT_SLUG } from "@/core/container";
-import { formatMoney } from "@/lib/format";
+import { formatDayMonth, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -19,7 +19,7 @@ function parseStatus(value: string | undefined): PaymentStatusFilter {
 }
 
 interface DashboardPageProps {
-  searchParams: Promise<{ status?: string; q?: string }>;
+  searchParams: Promise<{ status?: string; q?: string; event?: string }>;
 }
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
@@ -27,9 +27,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const status = parseStatus(params.status);
   const search = params.q?.trim() ?? "";
 
+  // Cada edição tem suas próprias inscrições; por padrão mostra a edição atual.
+  const events = await container.listEvents.execute();
+  const event = events.find((e) => e.slug === params.event) ?? events.find((e) => e.slug === CURRENT_EVENT_SLUG)!;
+  const isCurrent = event.slug === CURRENT_EVENT_SLUG;
+
   let data: ListRegistrationsOutput;
   try {
-    data = await container.listRegistrations.execute({ eventSlug: CURRENT_EVENT_SLUG, status, search });
+    data = await container.listRegistrations.execute({ eventSlug: event.slug, status, search });
   } catch (error) {
     console.error("[dashboard]", error);
     return (
@@ -60,6 +65,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const hrefFor = (next: PaymentStatusFilter) => {
     const query = new URLSearchParams();
+    if (!isCurrent) query.set("event", event.slug);
     if (next !== "all") query.set("status", next);
     if (search) query.set("q", search);
     const qs = query.toString();
@@ -68,13 +74,38 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <div className="space-y-8">
+      {events.length > 1 && (
+        <nav aria-label="Escolher evento" className="flex flex-wrap gap-2 border-b border-ink/10 pb-4">
+          {events.map((e) => {
+            const active = e.slug === event.slug;
+            return (
+              <Link
+                key={e.slug}
+                href={e.slug === CURRENT_EVENT_SLUG ? "/dashboard" : `/dashboard?event=${e.slug}`}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "rounded-2xl border px-4 py-2.5 text-left transition",
+                  active ? "border-magenta bg-magenta text-white" : "border-ink/10 bg-white hover:border-magenta/40",
+                )}
+              >
+                <span className="block text-sm font-semibold">{e.edition ?? e.name}</span>
+                <span className={cn("block text-xs", active ? "text-white/75" : "text-muted")}>
+                  {formatDayMonth(e.startsAt)}
+                  {e.slug === CURRENT_EVENT_SLUG && " · atual"}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      )}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold tracking-[0.3em] text-magenta uppercase">Numa Experiência</p>
+          <p className="text-xs font-bold tracking-[0.3em] text-magenta uppercase">{event.name}</p>
           <h1 className="mt-2 text-3xl font-semibold">Inscrições</h1>
         </div>
         <a
-          href="/dashboard/export"
+          href={`/dashboard/export?event=${event.slug}`}
           className={buttonVariants({ className: counts.paid === 0 ? "pointer-events-none opacity-50" : undefined })}
           aria-disabled={counts.paid === 0}
         >
@@ -110,6 +141,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </nav>
 
         <form action="/dashboard" className="flex gap-2">
+          {!isCurrent && <input type="hidden" name="event" value={event.slug} />}
           {status !== "all" && <input type="hidden" name="status" value={status} />}
           <input
             type="search"

@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { SparkleIcon } from "@/components/ui/icons";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { Event } from "@/core/domain/entities/event";
 import convidada from "@/assets/photos/manifesto-convidada.jpg";
@@ -31,6 +32,15 @@ export function ManifestoSection({ event }: { event: Event }) {
               <span className="float-left mt-1 mr-3 text-7xl leading-[0.8] text-magenta">“</span>
               {event.manifesto}
             </p>
+            {event.manifestoNote && (
+              <p className="mt-8 flex gap-3 rounded-2xl border border-magenta/20 bg-white/80 p-5 text-base leading-relaxed text-ink shadow-sm backdrop-blur-sm">
+                <SparkleIcon className="mt-1 size-4 shrink-0 text-magenta" />
+                <span>
+                  <strong className="font-semibold text-magenta">Edição mista · </strong>
+                  {event.manifestoNote}
+                </span>
+              </p>
+            )}
           </Reveal>
         </div>
 

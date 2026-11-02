@@ -1,9 +1,11 @@
 import { DressCodeSection } from "@/components/landing/dress-code-section";
 import { FaqSection } from "@/components/landing/faq-section";
 import { HeroSection } from "@/components/landing/hero-section";
+import { HighlightsSection } from "@/components/landing/highlights-section";
 import { LocationSection } from "@/components/landing/location-section";
 import { ManifestoSection } from "@/components/landing/manifesto-section";
 import { MobileCta } from "@/components/landing/mobile-cta";
+import { buildNavigation } from "@/components/landing/navigation";
 import { PartnersSection } from "@/components/landing/partners-section";
 import { RegistrationSection } from "@/components/landing/registration/registration-section";
 import { ScheduleSection } from "@/components/landing/schedule-section";
@@ -41,13 +43,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [event, isFull] = await Promise.all([getEvent(), getIsFull()]);
+  const navigation = buildNavigation(event);
 
   return (
     <>
-      <SiteHeader isFull={isFull} />
+      <SiteHeader navigation={navigation} isFull={isFull} />
       <main>
         <HeroSection event={event} isFull={isFull} />
         <ManifestoSection event={event} />
+        <HighlightsSection event={event} />
         <ScheduleSection event={event} />
         <PartnersSection event={event} />
         <DressCodeSection event={event} />
@@ -55,7 +59,7 @@ export default async function HomePage() {
         <LocationSection event={event} />
         <FaqSection event={event} />
       </main>
-      <SiteFooter />
+      <SiteFooter navigation={navigation} />
       <MobileCta price={formatMoney(event.price)} isFull={isFull} />
       <EventJsonLd event={event} isFull={isFull} />
     </>
@@ -69,7 +73,7 @@ function EventJsonLd({ event, isFull }: { event: Event; isFull: boolean }) {
     name: event.name,
     description: event.tagline,
     startDate: event.startsAt.toISOString(),
-    endDate: event.endsAt.toISOString(),
+    ...(event.endsAt && { endDate: event.endsAt.toISOString() }),
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {

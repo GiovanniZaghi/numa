@@ -3,6 +3,7 @@ import { DeleteRegistrationUseCase } from "./application/use-cases/delete-regist
 import { ExportPaidRegistrationsUseCase } from "./application/use-cases/export-paid-registrations";
 import { GetEventUseCase } from "./application/use-cases/get-event";
 import { GetEventAvailabilityUseCase } from "./application/use-cases/get-event-availability";
+import { ListEventsUseCase } from "./application/use-cases/list-events";
 import { ListRegistrationsUseCase } from "./application/use-cases/list-registrations";
 import { RegisterAttendeeUseCase } from "./application/use-cases/register-attendee";
 import { SetRegistrationPaidUseCase } from "./application/use-cases/set-registration-paid";
@@ -26,6 +27,7 @@ const confirmationChannel = new WhatsAppConfirmationChannel(env.WHATSAPP_NUMBER 
 
 export const container = {
   getEvent: new GetEventUseCase(eventRepository),
+  listEvents: new ListEventsUseCase(eventRepository),
   registerAttendee: new RegisterAttendeeUseCase(
     eventRepository,
     registrationRepository,
@@ -46,4 +48,4 @@ export const container = {
 };
 
 /** Evento atual da landing page e do painel. */
-export const CURRENT_EVENT_SLUG = "numa-experiencia";
+export const CURRENT_EVENT_SLUG = "numa-hyrox";
