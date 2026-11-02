@@ -75,7 +75,7 @@ export function HeroSection({ event, isFull = false }: { event: Event; isFull?: 
 
         <div className="relative mx-auto w-full max-w-sm lg:mr-0">
           <RotatingBadge
-            text={isFull ? "Vagas esgotadas • Fila de espera aberta •" : `Apenas ${event.capacity} vagas • Inscrições abertas •`}
+            text={isFull ? "Vagas esgotadas • Fila de espera aberta •" : "Inscrições abertas • Garanta sua vaga •"}
             className="absolute -top-14 -right-6 z-10 size-32 md:-right-12 md:size-36"
           />
 

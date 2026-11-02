@@ -4,12 +4,11 @@ import { shortLocation, type Event } from "@/core/domain/entities/event";
 import { formatDayMonth, formatMoney, formatTimeRange } from "@/lib/format";
 import { Reveal } from "./reveal";
 
-/** Detalhes da edição: modalidade, atrações e números (vagas, valor, data). */
+/** Detalhes da edição: modalidade, atrações e números (valor, data, local). */
 export function HighlightsSection({ event }: { event: Event }) {
   if (event.highlights.length === 0) return null;
 
   const facts = [
-    { label: "Vagas", value: `Apenas ${event.capacity}` },
     { label: "Valor", value: formatMoney(event.price) },
     { label: "Quando", value: `${formatDayMonth(event.startsAt)} · ${formatTimeRange(event.startsAt, event.endsAt)}` },
     { label: "Onde", value: shortLocation(event.location) },
@@ -48,7 +47,7 @@ export function HighlightsSection({ event }: { event: Event }) {
 
         <Reveal delay={200}>
           {/* gap-px sobre fundo claro desenha as divisórias entre os itens */}
-          <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[2rem] bg-white/25 text-white lg:grid-cols-4">
+          <dl className="mt-8 grid gap-px overflow-hidden rounded-[2rem] bg-white/25 text-white sm:grid-cols-3">
             {facts.map((fact) => (
               <div key={fact.label} className="bg-magenta p-6 sm:p-8">
                 <dt className="text-xs font-bold tracking-[0.25em] text-white/70 uppercase">{fact.label}</dt>
